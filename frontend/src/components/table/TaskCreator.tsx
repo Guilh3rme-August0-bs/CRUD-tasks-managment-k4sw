@@ -8,14 +8,22 @@ interface TaskCreatorProps {
 export const TaskCreator = ({ createModal }: TaskCreatorProps) => {
     return (
         <tr className="border-b border-orange-100 bg-orange-300">
-            <td colSpan={6} className="p-4 align-middle">
-                <div className="flex items-center justify-between gap-4 w-full">
-                    <span className="font-medium text-gray-800">Criar nova tarefa</span>
-                    <Button color="primary" size="small" onClick={createModal}>
-                        <LucidePlus />
-                    </Button>
+            <td colSpan={6} className="p-0 align-middle">
+                <div className="flex h-14 w-full items-center gap-3 px-4">
+                    <span className="text-base font-medium text-gray-800">Criar nova tarefa</span>
+
+                    <div className="ml-auto mr-4">
+                        <Button
+                            color="primary"
+                            size="small"
+                            onClick={createModal}
+                            type="button"
+                        >
+                            <LucidePlus />
+                        </Button>
+                    </div>
                 </div>
             </td>
         </tr>
     );
-}
+};

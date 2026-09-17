@@ -11,24 +11,32 @@ interface TableProps {
 
 export const Table = ({ data, createModal, onEditTask, onDeleteTask, onViewTask }: TableProps) => {
     return (
-        <div className="w-full max-w-6xl rounded-md border border-orange-200 shadow-sm">
-            <table className="w-full table-fixed border-collapse">
-                <thead className="bg-orange-600 text-white">
-                    <tr>
-                        <th className="w-[30%] p-4 text-center font-semibold">Tarefa</th>
-                        <th className="w-[15%] p-4 text-center font-semibold">Status</th>
-                        <th className="w-[15%] p-4 text-center font-semibold">Prioridade</th>
-                        <th className="w-[15%] p-4 text-center font-semibold">Criação</th>
-                        <th className="w-[15%] p-4 text-center font-semibold">Última Atualização</th>
-                        <th className="w-[10%] p-4 text-center font-semibold">Ações</th>
-                    </tr>
-                </thead>
-            </table>
-
-            <div className="flex flex-col w-full max-h-130 overflow-y-auto">
+        <div className="w-full max-w-6xl overflow-hidden rounded-md border border-orange-200 shadow-sm">
+            <div className="max-h-[75vh] overflow-y-auto">
                 <table className="w-full table-fixed border-collapse">
+                    <colgroup>
+                        <col className="w-[30%]" />
+                        <col className="w-[15%]" />
+                        <col className="w-[15%]" />
+                        <col className="w-[15%]" />
+                        <col className="w-[15%]" />
+                        <col className="w-[10%]" />
+                    </colgroup>
+
+                    <thead className="bg-orange-600 text-white">
+                        <tr>
+                            <th className="p-4 text-center font-semibold">Tarefa</th>
+                            <th className="p-4 text-center font-semibold">Status</th>
+                            <th className="p-4 text-center font-semibold">Prioridade</th>
+                            <th className="p-4 text-center font-semibold">Criação</th>
+                            <th className="p-4 text-center font-semibold">Última Atualização</th>
+                            <th className="p-4 text-center font-semibold">Ações</th>
+                        </tr>
+                    </thead>
+
                     <tbody className="bg-white">
                         <TaskCreator createModal={createModal} />
+
                         {data.length === 0 ? (
                             <tr>
                                 <td colSpan={6} className="bg-orange-100 p-4 text-center font-medium text-black">
