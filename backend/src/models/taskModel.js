@@ -12,6 +12,14 @@ export const criarTarefaModel = async (titulo, descricao, status, prioridade) =>
     return result.rows[0];
 };
 
+export const listarTarefasModel = async () => {
+    const sql = `
+    SELECT * FROM tarefas
+    `;
+    const resultado = await query(sql)
+    return resultado.rows;
+};
+
 export const atualizarTarefaModel = async (titulo, descricao, status, prioridade, id) => {
     const sql = `
     UPDATE tarefas 
@@ -19,8 +27,19 @@ export const atualizarTarefaModel = async (titulo, descricao, status, prioridade
     WHERE id = $5
     RETURNING *;
     `;
-    const valores = [titulo, descricao, status, prioridade, id];
+    const values = [titulo, descricao, status, prioridade, id];
 
-    const resultado = await query(sql, valores);
+    const resultado = await query(sql, values);
     return resultado.rows;
 };
+
+export const excluirTarefaModel = async (id) => {
+    const sql = `
+    DELETE FROM tarefas 
+    WHERE id = $1
+    RETURNING *;
+    `;
+
+    const resultado = await query(sql, [id])
+    return resultado.rows;
+}
