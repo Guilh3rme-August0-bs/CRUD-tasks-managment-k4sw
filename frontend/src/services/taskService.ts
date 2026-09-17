@@ -9,13 +9,29 @@ type NovaTarefa = {
     descricao?: string;
 };
 
+const buildQueryString = (params: Record<string, string | undefined>) => {
+    const entries = Object.entries(params).filter(
+        ([, value]) => value !== undefined && value !== ""
+    );
+
+    if (entries.length === 0) return "";
+
+    const query = entries
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+        .join("&");
+
+    return `?${query}`;
+};
+
 export const taskService = {
-    carregarTarefas: async (): Promise<RowProps[]> => {
+    carregarTarefas: async (ordenacao?: string): Promise<RowProps[]> => {
         if (!URL) {
             throw new Error("URL não encontrada");
         }
 
-        const response = await fetch(`${URL}/tasks`);
+        const response = await fetch(
+            `${URL}/tasks${buildQueryString({ ordenacao })}`
+        );
 
         if (!response.ok) {
             throw new Error(`Erro na requisição: ${response.status}`);

@@ -11,13 +11,17 @@ function App() {
   const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create')
   const [selectedTask, setSelectedTask] = useState<RowProps | null>(null)
 
-  const getTasks = async () => {
+  const getTasks = async (ordenacao = 'atualizacao') => {
     try {
-      const listaDeTarefas = await taskService.carregarTarefas()
+      const listaDeTarefas = await taskService.carregarTarefas(ordenacao)
       setTableData(listaDeTarefas)
     } catch (error) {
       console.log('Falha ao carregar tarefas:', error)
     }
+  }
+
+  const customFilter = (filterValue: string) => {
+    getTasks(filterValue)
   }
 
   const deleteTask = async (id: number) => {
@@ -32,13 +36,13 @@ function App() {
   }
 
   const openViewModal = (id: number) => {
-    const taskToView = tableData.find(task => task.id === id);
+    const taskToView = tableData.find(task => task.id === id)
     if (taskToView) {
-      setSelectedTask(taskToView);
-      setModalMode('view');
-      setIsTaskModalOpen(true);
+      setSelectedTask(taskToView)
+      setModalMode('view')
+      setIsTaskModalOpen(true)
     }
-  };
+  }
 
   useEffect(() => {
     getTasks()
@@ -80,6 +84,7 @@ function App() {
         onEditTask={openEditModal}
         onDeleteTask={deleteTask}
         onViewTask={openViewModal}
+        customFilter={customFilter}
       />
     </div>
   )
