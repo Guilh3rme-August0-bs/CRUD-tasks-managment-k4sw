@@ -65,5 +65,19 @@ export const taskService = {
 
         const data: RowProps = await response.json();
         return data;
+    },
+
+    excluirTarefa: async (id: string | number): Promise<void> => {
+        if (!URL) {
+            throw new Error("URL não encontrada");
+        }
+
+        const response = await fetch(`${URL}/tasks/${id}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro ao excluir tarefa: ${response.status}`);
+        }
     }
 };

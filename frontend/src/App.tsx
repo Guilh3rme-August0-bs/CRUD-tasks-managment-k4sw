@@ -8,7 +8,7 @@ import type { RowProps } from './components/table/TableRow'
 function App() {
   const [tableData, setTableData] = useState<RowProps[]>([])
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
-  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create')
+  const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create')
   const [selectedTask, setSelectedTask] = useState<RowProps | null>(null)
 
   const getTasks = async () => {
@@ -19,6 +19,26 @@ function App() {
       console.log('Falha ao carregar tarefas:', error)
     }
   }
+
+  const deleteTask = async (id: number) => {
+    if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
+      try {
+        await taskService.excluirTarefa(id)
+        getTasks()
+      } catch (error) {
+        console.error('Erro ao deletar tarefa:', error)
+      }
+    }
+  }
+
+  const openViewModal = (id: number) => {
+    const taskToView = tableData.find(task => task.id === id);
+    if (taskToView) {
+      setSelectedTask(taskToView);
+      setModalMode('view');
+      setIsTaskModalOpen(true);
+    }
+  };
 
   useEffect(() => {
     getTasks()
@@ -58,6 +78,8 @@ function App() {
         data={tableData}
         createModal={openCreateModal}
         onEditTask={openEditModal}
+        onDeleteTask={deleteTask}
+        onViewTask={openViewModal}
       />
     </div>
   )

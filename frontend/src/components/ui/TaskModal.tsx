@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { taskService } from "../../services/taskService";
 import type { RowProps } from "../table/TableRow";
+import { Button } from "./Button";
 
 interface TaskModalProps {
-    mode: "create" | "edit";
+    mode: "create" | "edit" | "view";
     task?: RowProps | null;
     closeModal: () => void;
     tableUpdate?: () => void;
@@ -16,11 +17,11 @@ export const TaskModal = ({ mode, task, closeModal, tableUpdate }: TaskModalProp
     const [prioridade, setPrioridade] = useState("BAIXA");
 
     useEffect(() => {
-        if (mode === "edit" && task) {
-            setTitulo(task.titulo || "");
-            setStatus(task.status || "PENDENTE");
-            setPrioridade(task.prioridade || "BAIXA");
-            setDescricao(task.descricao || "");
+        if (mode === "edit" || mode === "view") {
+            setTitulo(task?.titulo || "");
+            setStatus(task?.status || "PENDENTE");
+            setPrioridade(task?.prioridade || "BAIXA");
+            setDescricao(task?.descricao || "");
             return;
         }
 
@@ -59,6 +60,7 @@ export const TaskModal = ({ mode, task, closeModal, tableUpdate }: TaskModalProp
         }
     };
 
+
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
@@ -69,63 +71,65 @@ export const TaskModal = ({ mode, task, closeModal, tableUpdate }: TaskModalProp
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="mb-4 bg-orange-500 p-3 text-center text-lg font-semibold text-white">
-                    {mode === "create" ? "Criar Tarefa" : "Editar Tarefa"}
+                    {mode === "create" ? "Criar Tarefa" : mode === "edit" ? "Editar Tarefa" : "Visualizar Tarefa"}
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4 md:flex-row">
-                        <input
-                            type="text"
-                            placeholder="Título da tarefa"
-                            value={titulo}
-                            onChange={(e) => setTitulo(e.target.value)}
-                            className="flex-1 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                        <div className="flex flex-col">
+                            {!titulo && <label className="text-red-500">Preenchimento Obrigatório</label>}
+                            <div className="flex flex-row gap-4">
+                                <input
+                                    type="text"
+                                    placeholder="Título da tarefa"
+                                    value={titulo}
+                                    maxLength={150}
+                                    disabled={mode === "view"}
+                                    onChange={(e) => setTitulo(e.target.value)}
+                                    className="flex-1 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-100"
+                                />
 
-                        <select
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
-                            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="PENDENTE">Pendente</option>
-                            <option value="EM_ANDAMENTO">Em Andamento</option>
-                            <option value="CONCLUIDA">Concluída</option>
-                        </select>
+                                <select
+                                    value={status}
+                                    disabled={mode === "view"}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                    className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-100"
+                                >
+                                    <option value="PENDENTE">Pendente</option>
+                                    <option value="EM_ANDAMENTO">Em Andamento</option>
+                                    <option value="CONCLUIDA">Concluída</option>
+                                </select>
 
-                        <select
-                            value={prioridade}
-                            onChange={(e) => setPrioridade(e.target.value)}
-                            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="BAIXA">Baixa</option>
-                            <option value="MEDIA">Média</option>
-                            <option value="ALTA">Alta</option>
-                        </select>
+                                <select
+                                    value={prioridade}
+                                    disabled={mode === "view"}
+                                    onChange={(e) => setPrioridade(e.target.value)}
+                                    className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-100"
+                                >
+                                    <option value="BAIXA">Baixa</option>
+                                    <option value="MEDIA">Média</option>
+                                    <option value="ALTA">Alta</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <textarea
                         value={descricao}
+                        disabled={mode === "view"}
                         onChange={(e) => setDescricao(e.target.value)}
-                        className="min-h-30 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="min-h-30 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-100"
                         placeholder="Descrição da tarefa"
                     />
-
-                    <div className="flex justify-end gap-2">
-                        <button
-                            type="button"
-                            className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
-                            onClick={closeModal}
-                        >
-                            Cancelar
-                        </button>
-
-                        <button
-                            type="submit"
-                            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-                        >
-                            Salvar
-                        </button>
-                    </div>
+                    {mode !== "view" && (
+                        <div className="flex justify-end gap-2">
+                            <Button color="primary" disabled={titulo.length < 1} type="submit">
+                                Salvar
+                            </Button>
+                            <Button color="danger" onClick={closeModal}>
+                                Cancelar
+                            </Button>
+                        </div>)}
                 </form>
             </div>
         </div>
