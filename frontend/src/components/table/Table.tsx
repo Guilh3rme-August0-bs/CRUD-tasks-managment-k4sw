@@ -9,6 +9,7 @@ interface TableProps {
     onEditTask: (task: RowProps) => void;
     onDeleteTask: (id: number) => void;
     onViewTask?: (id: number) => void;
+    customFilter: (filterValue: string) => void;
 }
 
 export const Table = ({
@@ -17,7 +18,8 @@ export const Table = ({
     createModal,
     onEditTask,
     onDeleteTask,
-    onViewTask
+    onViewTask,
+    customFilter
 }: TableProps) => {
     return (
         <div className="w-full max-w-6xl overflow-hidden rounded-md border border-orange-200 shadow-sm">
@@ -44,7 +46,7 @@ export const Table = ({
                     </thead>
 
                     <tbody className="bg-white">
-                        <TaskCreator createModal={createModal} />
+                        <TaskCreator createModal={createModal} customFilter={customFilter} />
 
                         {isTableLoading ? (
                             <tr>
