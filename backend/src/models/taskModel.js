@@ -44,9 +44,14 @@ export const listarTarefasModel = async (ordenacao = 'atualizacao') => {
       `;
             break;
 
+        case 'titulo':
+
+        ordem = `LOWER(titulo) ASC, created_at DESC`;
+        break;
+
         case 'atualizacao':
         default:
-            ordem = 'updated_at DESC NULLS LAST, created_at DESC';
+            ordem = 'LOWER(titulo) ASC, created_at DESC';
             break;
     }
 
