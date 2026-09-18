@@ -200,3 +200,12 @@ Seu uso esteve concentrado em:
 * apoio na documentação do projeto.
 
 A ferramenta foi utilizada como recurso de assistência durante o desenvolvimento, com revisão e validação das sugestões antes de sua utilização no projeto.
+
+## Melhorias futuras
+
+- Paginação da listagem de tarefas.
+- Paginação server-side para grandes volumes de dados.
+- Busca textual por tarefas.
+- Implementação de histórico de alterações.
+- Implementação de health check e observabilidade da API.
+- Criação de dashboard com métricas de produtividade.
