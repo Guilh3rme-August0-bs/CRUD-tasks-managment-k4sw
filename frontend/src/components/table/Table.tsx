@@ -1,8 +1,10 @@
 import { TableRow, type RowProps } from "./TableRow";
 import { TaskCreator } from "./TaskCreator";
+import { Loading } from "../ui/Loading";
 
 interface TableProps {
     data: RowProps[];
+    isTableLoading?: boolean;
     createModal: () => void;
     onEditTask: (task: RowProps) => void;
     onDeleteTask: (id: number) => void;
@@ -10,7 +12,15 @@ interface TableProps {
     customFilter: (filterValue: string) => void;
 }
 
-export const Table = ({ data, createModal, onEditTask, onDeleteTask, onViewTask, customFilter }: TableProps) => {
+export const Table = ({
+    data,
+    isTableLoading = false,
+    createModal,
+    onEditTask,
+    onDeleteTask,
+    onViewTask,
+    customFilter
+}: TableProps) => {
     return (
         <div className="w-full max-w-6xl overflow-hidden rounded-md border border-orange-200 shadow-sm">
             <div className="max-h-[75vh] overflow-y-auto">
@@ -38,7 +48,13 @@ export const Table = ({ data, createModal, onEditTask, onDeleteTask, onViewTask,
                     <tbody className="bg-white">
                         <TaskCreator createModal={createModal} customFilter={customFilter} />
 
-                        {data.length === 0 ? (
+                        {isTableLoading ? (
+                            <tr>
+                                <td colSpan={6} className="p-4 text-center">
+                                    <Loading />
+                                </td>
+                            </tr>
+                        ) : data.length === 0 ? (
                             <tr>
                                 <td colSpan={6} className="bg-orange-100 p-4 text-center font-medium text-black">
                                     Sem dados

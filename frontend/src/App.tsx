@@ -10,13 +10,17 @@ function App() {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
   const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create')
   const [selectedTask, setSelectedTask] = useState<RowProps | null>(null)
+  const [isTableLoading, setIsTableLoading] = useState(false)
 
   const getTasks = async (ordenacao = 'atualizacao') => {
     try {
+      setIsTableLoading(true)
       const listaDeTarefas = await taskService.carregarTarefas(ordenacao)
       setTableData(listaDeTarefas)
     } catch (error) {
       console.log('Falha ao carregar tarefas:', error)
+    } finally {
+      setIsTableLoading(false)
     }
   }
 
@@ -29,6 +33,7 @@ function App() {
       try {
         await taskService.excluirTarefa(id)
         getTasks()
+        alert('Tarefa deletada com sucesso!')
       } catch (error) {
         console.error('Erro ao deletar tarefa:', error)
       }
@@ -85,6 +90,7 @@ function App() {
         onDeleteTask={deleteTask}
         onViewTask={openViewModal}
         customFilter={customFilter}
+        isTableLoading={isTableLoading}
       />
     </div>
   )

@@ -8,7 +8,7 @@ interface TaskCreatorProps {
 }
 
 export const TaskCreator = ({ createModal, customFilter }: TaskCreatorProps) => {
-    const [filter, setFilter] = useState("atualizacao");
+    const [filter, setFilter] = useState("titulo");
 
     useEffect(() => {
         customFilter(filter);
@@ -27,6 +27,7 @@ export const TaskCreator = ({ createModal, customFilter }: TaskCreatorProps) => 
                                 value={filter}
                                 onChange={(e) => setFilter(e.target.value)}
                             >
+                                <option value="titulo">por título</option>
                                 <option value="atualizacao">por data de atualização</option>
                                 <option value="criacao">por data de criação</option>
                                 <option value="status">por status</option>

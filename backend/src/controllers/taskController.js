@@ -26,7 +26,7 @@ export const criarTarefa = async (req, res) => {
   }
 };
 
-const ordenacoesValidas = ['atualizacao', 'criacao', 'status', 'prioridade'];
+const ordenacoesValidas = ['atualizacao', 'criacao', 'status', 'prioridade', 'titulo'];
 
 export const verTarefas = async (req, res) => {
   try {
