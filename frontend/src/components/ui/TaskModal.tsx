@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { taskService } from "../../services/taskService";
 import type { RowProps } from "../table/TableRow";
 import { Button } from "./Button";
+import { Loading } from "./Loading";
 
 interface TaskModalProps {
     mode: "create" | "edit" | "view";
@@ -15,6 +16,7 @@ export const TaskModal = ({ mode, task, closeModal, tableUpdate }: TaskModalProp
     const [status, setStatus] = useState("PENDENTE");
     const [descricao, setDescricao] = useState("");
     const [prioridade, setPrioridade] = useState("BAIXA");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (mode === "edit" || mode === "view") {
@@ -33,6 +35,7 @@ export const TaskModal = ({ mode, task, closeModal, tableUpdate }: TaskModalProp
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
 
         try {
             if (mode === "create") {
@@ -55,11 +58,14 @@ export const TaskModal = ({ mode, task, closeModal, tableUpdate }: TaskModalProp
 
             closeModal();
             tableUpdate?.();
+            alert(`Tarefa salva!`)
         } catch (error) {
             console.error("Erro ao salvar tarefa:", error);
+            alert(`Erro ao salvar tarefa: ${error}`);
+        } finally {
+            setIsSubmitting(false);
         }
     };
-
 
     return (
         <div
@@ -73,6 +79,8 @@ export const TaskModal = ({ mode, task, closeModal, tableUpdate }: TaskModalProp
                 <div className="mb-4 bg-orange-500 p-3 text-center text-lg font-semibold text-white">
                     {mode === "create" ? "Criar Tarefa" : mode === "edit" ? "Editar Tarefa" : "Visualizar Tarefa"}
                 </div>
+
+                {isSubmitting && <Loading />}
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4 md:flex-row">
