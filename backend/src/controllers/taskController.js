@@ -16,7 +16,7 @@ export const criarTarefa = async (req, res) => {
 
     return res.status(201).json({ mensagem: 'Nova tarefa criada!' });
   } catch (error) {
-    console.error('Erro ao criar tarefa:', error);
+    console.error('Erro ao criar tarefa:', error instanceof Error ? error.message : String(error));
     return res.status(500).json({ erro: 'Erro interno do servidor ao salvar a tarefa.' });
   }
 };
@@ -27,7 +27,7 @@ export const verTarefas = async (req, res) => {
     return res.status(200).json(tarefasLista);
   }
   catch (error) {
-    console.error('Erro ao buscar tarefas:', error);
+    console.error('Erro ao buscar tarefas:', error instanceof Error ? error.message : String(error));
     return res.status(500).json({ erro: 'Falha ao carregar as tarefas' });
   }
 };
@@ -49,7 +49,7 @@ export const atualizarTarefa = async (req, res) => {
 
     return res.status(200).json({mensagem: 'Tarefa atualizada!'});
   } catch (error) {
-    console.error('Erro ao atualizar tarefa:', error);
+    console.error('Erro ao atualizar tarefa:', error instanceof Error ? error.message : String(error));
     return res.status(500).json({ erro: 'Erro interno do servidor ao atualizar a tarefa.' });
   }
 };
@@ -66,7 +66,7 @@ export const excluirTarefa = async (req, res) => {
     return res.status(200).json({ mensagem: 'Tarefa excluída!' });
   }
   catch (error) {
-    console.error('Erro ao excluir tarefa:', error);
+    console.error('Erro ao excluir tarefa:', error instanceof Error ? error.message : String(error));
     return res.status(500).json({ erro: 'Erro interno do servidor ao excluir a tarefa.' });
   }
 }
